@@ -5,22 +5,23 @@ import (
 	"time"
 
 	"github.com/elastic/beats/v7/libbeat/beat"
-	"github.com/elastic/beats/v7/libbeat/common"
-	"github.com/elastic/beats/v7/libbeat/logp"
+	"github.com/elastic/elastic-agent-libs/config"
+	"github.com/elastic/elastic-agent-libs/logp"
+	"github.com/elastic/elastic-agent-libs/mapstr"
 
-	"github.com/thetherington/metadatabeat/config"
+	metadataCfg "github.com/thetherington/metadatabeat/config"
 )
 
 // metadatabeat configuration.
 type metadatabeat struct {
 	done   chan struct{}
-	config config.Config
+	config metadataCfg.Config
 	client beat.Client
 }
 
 // New creates an instance of metadatabeat.
-func New(b *beat.Beat, cfg *common.Config) (beat.Beater, error) {
-	c := config.DefaultConfig
+func New(b *beat.Beat, cfg *config.C) (beat.Beater, error) {
+	c := metadataCfg.DefaultConfig
 	if err := cfg.Unpack(&c); err != nil {
 		return nil, fmt.Errorf("Error reading config file: %v", err)
 	}
@@ -53,7 +54,7 @@ func (bt *metadatabeat) Run(b *beat.Beat) error {
 
 		event := beat.Event{
 			Timestamp: time.Now(),
-			Fields: common.MapStr{
+			Fields: mapstr.M{
 				"type":    b.Info.Name,
 				"counter": counter,
 			},

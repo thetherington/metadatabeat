@@ -20,7 +20,7 @@ import (
 func init() {
 	devtools.SetBuildVariableSources(devtools.DefaultBeatBuildVariableSources)
 
-	devtools.BeatDescription = "One sentence description of the Beat."
+	devtools.BeatDescription = "Telos Metadata collection Beat"
 	devtools.BeatVendor = "Tom H"
 	devtools.BeatProjectType = devtools.CommunityProject
 	devtools.CrossBuildMountModcache = true
@@ -33,7 +33,8 @@ func Package() {
 	start := time.Now()
 	defer func() { fmt.Println("package ran for", time.Since(start)) }()
 
-	devtools.UseCommunityBeatPackaging()
+	// devtools.UseCommunityBeatPackaging()
+	devtools.UseElasticBeatOSSPackaging()
 
 	mg.Deps(Update)
 	mg.Deps(build.CrossBuild, build.CrossBuildGoDaemon)
