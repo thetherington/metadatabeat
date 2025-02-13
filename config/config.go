@@ -3,12 +3,14 @@
 
 package config
 
-import "time"
-
 type Config struct {
-	Period time.Duration `config:"period"`
+	Port       int      `config:"port"`
+	Addresses  []string `config:"addresses"`
+	Interfaces []string `config:"interfaces"`
 }
 
 var DefaultConfig = Config{
-	Period: 1 * time.Second,
+	Port:       5010,
+	Addresses:  []string{"239.131.10.225"},
+	Interfaces: []string{"enp0s31f6"},
 }

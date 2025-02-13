@@ -3,5 +3,14 @@
 ############################# {Beat} ######################################
 
 metadatabeat:
-  # Defines how often an event is sent to the output
-  period: 1s
+  # Port defines metadata rtp stream port
+  port: 5010
+  
+  # Interfaces are a list of interfaces to receive multicast on
+  interfaces: 
+    - "enp0s31f6"
+
+  # Addresses are a list of multicast addresses to subscribe to.
+  addresses:
+    - "239.131.10.225"
+
