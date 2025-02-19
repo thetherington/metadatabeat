@@ -13,6 +13,8 @@ metadatabeat:
   # Addresses are a list of multicast addresses to subscribe to.
   addresses:
     - "239.131.10.225"
+    - "239.131.10.226"
+    - "239.131.10.227"
 
 
 # ================================== General ===================================
@@ -79,7 +81,7 @@ setup.kibana:
 # ---------------------------- Elasticsearch Output ----------------------------
 output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["localhost:9200"]
+  hosts: ["172.16.205.80:9200"]
 
   # Protocol - either `http` (default) or `https`.
   #protocol: "https"

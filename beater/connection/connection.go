@@ -28,7 +28,7 @@ func NewListener(cfg metadataCfg.Config, handler handler) (*UDPMulticastListener
 		return nil, fmt.Errorf("%w: %d addresses / %d multicasts", errMissingArguments, len(cfg.Addresses), len(cfg.Interfaces))
 	}
 
-	uml := &UDPMulticastListener{
+	lis := &UDPMulticastListener{
 		iifs:   make([]*net.Interface, 0),
 		mcasts: make([]net.IP, 0),
 	}
@@ -40,7 +40,7 @@ func NewListener(cfg metadataCfg.Config, handler handler) (*UDPMulticastListener
 			return nil, fmt.Errorf("%w: %s", errUnknownInterface, i)
 		}
 
-		uml.iifs = append(uml.iifs, iif)
+		lis.iifs = append(lis.iifs, iif)
 	}
 
 	// parse and validate the multicast address
@@ -51,7 +51,7 @@ func NewListener(cfg metadataCfg.Config, handler handler) (*UDPMulticastListener
 			return nil, fmt.Errorf("%w: %s", errInvalidMulticast, m)
 		}
 
-		uml.mcasts = append(uml.mcasts, group)
+		lis.mcasts = append(lis.mcasts, group)
 	}
 
 	c, err := net.ListenPacket("udp4", fmt.Sprintf("0.0.0.0:%d", cfg.Port))
@@ -59,44 +59,38 @@ func NewListener(cfg metadataCfg.Config, handler handler) (*UDPMulticastListener
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	uml.p = ipv4.NewPacketConn(c)
+	lis.p = ipv4.NewPacketConn(c)
 
-	for _, iif := range uml.iifs {
-		for _, mcast := range uml.mcasts {
-			if err := uml.p.JoinGroup(iif, &net.UDPAddr{IP: mcast}); err != nil {
+	for _, iif := range lis.iifs {
+		for _, mcast := range lis.mcasts {
+			if err := lis.p.JoinGroup(iif, &net.UDPAddr{IP: mcast}); err != nil {
 				return nil, fmt.Errorf("%w", err)
 			}
 		}
 	}
 
-	if err := uml.p.SetControlMessage(ipv4.FlagDst, true); err != nil {
+	if err := lis.p.SetControlMessage(ipv4.FlagDst, true); err != nil {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	// start reading
+	// start reading and loop forever
 	go func() {
-		// loop forever
 		for {
 			buffer := make([]byte, maxDatagramSize)
 
-			numBytes, cm, src, err := uml.p.ReadFrom(buffer)
+			numBytes, cm, src, err := lis.p.ReadFrom(buffer)
 			if err != nil {
 				log.Println("ReadFromUDP failed:", err)
 				return
 			}
 
-			if cm.Dst.IsMulticast() {
-				if uml.IsSubcribed(cm) {
-					// worker pool?
-					handler(cm.Dst, src, numBytes, buffer)
-				} else {
-					continue
-				}
+			if cm.Dst.IsMulticast() && lis.IsSubcribed(cm) {
+				handler(cm.Dst, src, numBytes, buffer)
 			}
 		}
 	}()
 
-	return uml, nil
+	return lis, nil
 }
 
 func (u *UDPMulticastListener) IsSubcribed(cm *ipv4.ControlMessage) bool {

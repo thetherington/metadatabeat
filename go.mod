@@ -21,6 +21,7 @@ replace (
 )
 
 require (
+	github.com/alitto/pond/v2 v2.2.0
 	github.com/blakesmith/ar v0.0.0-20190502131153-809d4375e1fb
 	github.com/cavaliergopher/rpm v1.2.0
 	github.com/elastic/beats/v7 v7.17.17-0.20231212204313-6a292023769b
@@ -147,7 +148,7 @@ require (
 	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/crypto v0.16.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/net v0.19.0 // indirect
+	golang.org/x/net v0.19.0
 	golang.org/x/oauth2 v0.13.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
