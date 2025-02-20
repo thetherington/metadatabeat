@@ -15624,15 +15624,390 @@ type: keyword
 None
 
 
-*`counter`*::
+*`type`*::
 +
 --
-PLEASE UPDATE DOCUMENTATION
+Data Type
+
+
+type: keyword
+
+required: True
+
+--
+
+
+*`node.src`*::
++
+--
+IP address of the metadata node
+
+
+type: ip
+
+required: True
+
+--
+
+*`node.dst`*::
++
+--
+Destination multicast address
+
+
+type: keyword
+
+required: True
+
+--
+
+
+*`mds.format`*::
++
+--
+MDS format of the message
+
+
+type: keyword
+
+required: True
+
+--
+
+*`mds.version`*::
++
+--
+MDS version
+
+
+type: keyword
+
+required: True
+
+--
+
+
+*`ev.queue_depth`*::
++
+--
+Queue depth indicates the order in which metadata events shall become active
+
+
+type: integer
+
+required: True
+
+--
+
+*`ev.artist`*::
++
+--
+The artist performing a song; this is displayed in receivers.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.title`*::
++
+--
+The title of a song; this is displayed in receivers. 
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.comment_1`*::
++
+--
+A generic text field associated with the metadata event.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.comment_2`*::
++
+--
+A generic text field associated with the metadata event. 
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.display`*::
++
+--
+This field indicates whether or not the event should be routed downstream of the MDS             
+
+
+type: integer
+
+required: True
+
+--
+
+*`ev.duration`*::
++
+--
+Duration is the display duration of the associated audio in seconds.
+
+
+type: integer
+
+required: False
+
+--
+
+*`ev.bus_code`*::
++
+--
+A bus code is a broadcast parameter for routing purposes.
+
+
+type: keyword
+
+required: True
+
+--
+
+*`ev.pts`*::
++
+--
+The time stamp provides a time of day indicating when the associated metadata is to be presented
+
+
+type: keyword
+
+required: True
+
+--
+
+*`ev.source_type`*::
++
+--
+This field identifies the type of the source of the event.
+
+
+type: keyword
+
+required: True
+
+--
+
+*`ev.asset_id`*::
++
+--
+An asset ID is a unique ID for metadata associated with the event.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.content_type`*::
++
+--
+This field identifies the type of content the metadata applies to
+
+
+type: keyword
+
+required: True
+
+--
+
+*`ev.music_db_id`*::
++
+--
+Music DB ID
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.artist_id`*::
++
+--
+Artist ID is only used in a system configured without a MAM otherwise it is ignored
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.pid`*::
++
+--
+Parameter used to provide advanced low band receiver features.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.reconciliation_id`*::
++
+--
+Reconciliation ID is currently used for Business Intelligence
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.parent_type_id`*::
++
+--
+This field is a number that indicates the parent type of an event
+
+
+type: integer
+
+required: False
+
+--
+
+*`ev.parent_duration`*::
++
+--
+This field is a number indicating the duration of a spot block. It is seconds with a decimal place
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.parent_name`*::
++
+--
+This field is a string that is used for children of macro and show type.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.child_count`*::
++
+--
+This field is a number that is the total count of child events in a spot block.
+
+
+type: integer
+
+required: False
+
+--
+
+*`ev.child_index`*::
++
+--
+This field is a number that indicates the instance of a child within a spot block.
+
+
+type: integer
+
+required: False
+
+--
+
+*`ev.action`*::
++
+--
+This is a sting parameter to instruct the MDS to indicate specific action associated with the cut.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.action_param`*::
++
+--
+This is a sting parameter associated with an action.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.playout_duration`*::
++
+--
+Number of milliseconds of the current audio playout.
 
 
 type: long
 
-required: True
+required: False
+
+--
+
+*`ev.segue_duration`*::
++
+--
+Number of milliseconds until the next audio is expected to start.
+
+
+type: long
+
+required: False
+
+--
+
+*`ev.upc`*::
++
+--
+The UPC associated with the content.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.isrc`*::
++
+--
+The ISRC associated with the content.
+
+
+type: keyword
+
+required: False
 
 --
 

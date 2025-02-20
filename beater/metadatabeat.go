@@ -3,7 +3,6 @@ package beater
 import (
 	"encoding/xml"
 	"fmt"
-	"log"
 	"net"
 	"strings"
 	"time"
@@ -22,9 +21,8 @@ import (
 )
 
 var (
-	RootPool      pond.Pool
-	GroupPools    = map[string]pond.Pool{}
-	EventFieldMap = map[string]string{}
+	RootPool   pond.Pool
+	GroupPools = map[string]pond.Pool{}
 )
 
 // metadatabeat configuration.
@@ -34,14 +32,6 @@ type metadatabeat struct {
 	client   beat.Client
 	listener *connection.UDPMulticastListener
 	cache    cache.StoreMap
-}
-
-func init() {
-	// save the struct "es" tags
-	var err error
-	if EventFieldMap, err = parseStructTags(MdseventType{}); err != nil {
-		log.Fatal(err)
-	}
 }
 
 // New creates an instance of metadatabeat.
@@ -208,60 +198,85 @@ func (bt *metadatabeat) BuildEvents(src string, dst string, mdsupdate MdsUpdate)
 			},
 		}
 
-		if mdsupdate.F == 1 {
-			ev := mapstr.M{}
-
-			ev.Put(EventFieldMap["Q"], e.Q)
-			ev.Put(EventFieldMap["Dur"], e.Dur)
-			ev.Put(EventFieldMap["Disp"], e.Disp)
-			ev.Put(EventFieldMap["Pldur"], e.Pldur)
-
-			if e.Art != "" {
-				ev.Put(EventFieldMap["Art"], e.Art)
-			}
-			if e.Titl != "" {
-				ev.Put(EventFieldMap["Titl"], e.Titl)
-			}
-			if e.Com1 != "" {
-				ev.Put(EventFieldMap["Com1"], e.Com1)
-			}
-			if e.Com2 != "" {
-				ev.Put(EventFieldMap["Com2"], e.Com2)
-			}
-			if e.Bc != "" {
-				ev.Put(EventFieldMap["Bc"], e.Bc)
-			}
-			if e.Pts != "" {
-				ev.Put(EventFieldMap["Pts"], e.Pts)
-			}
-			if e.SrcT != "" {
-				ev.Put(EventFieldMap["SrcT"], e.SrcT)
-			}
-			if e.AID != "" {
-				ev.Put(EventFieldMap["AID"], e.AID)
-			}
-			if e.ConT != "" {
-				ev.Put(EventFieldMap["ConT"], e.ConT)
-			}
-			if e.MID != "" {
-				ev.Put(EventFieldMap["MID"], e.MID)
-			}
-			if e.ArtID != "" {
-				ev.Put(EventFieldMap["ArtID"], e.ArtID)
-			}
-			if e.Pid != "" {
-				ev.Put(EventFieldMap["Pid"], e.Pid)
-			}
-			if e.Rid != "" {
-				ev.Put(EventFieldMap["Rid"], e.Rid)
-			}
-			if e.Bdur != "" {
-				ev.Put(EventFieldMap["Bdur"], e.Bdur)
-			}
-
-			event.PutValue("ev", ev)
+		// mandatory fields
+		ev := mapstr.M{
+			EventFieldMap["Q"]:    e.Q,
+			EventFieldMap["Pts"]:  e.Pts,
+			EventFieldMap["SrcT"]: e.SrcT,
+			EventFieldMap["ConT"]: e.ConT,
+			EventFieldMap["Bc"]:   e.Bc,
+			EventFieldMap["Disp"]: e.Disp,
 		}
 
+		// integer fields which can't do anything about default values
+		ev.Put(EventFieldMap["Pldur"], e.Pldur)
+
+		if e.AID != "" {
+			ev.Put(EventFieldMap["AID"], e.AID)
+		}
+		if e.Art != "" {
+			ev.Put(EventFieldMap["Art"], e.Art)
+		}
+		if e.Titl != "" {
+			ev.Put(EventFieldMap["Titl"], e.Titl)
+		}
+		if e.Pid != "" {
+			ev.Put(EventFieldMap["Pid"], e.Pid)
+		}
+		if e.Com1 != "" {
+			ev.Put(EventFieldMap["Com1"], e.Com1)
+		}
+		if e.Com2 != "" {
+			ev.Put(EventFieldMap["Com2"], e.Com2)
+		}
+		if e.ArtID != "" {
+			ev.Put(EventFieldMap["ArtID"], e.ArtID)
+		}
+		if e.Dur != 0 {
+			ev.Put(EventFieldMap["Dur"], e.Dur)
+		}
+		if e.MID != "" {
+			ev.Put(EventFieldMap["MID"], e.MID)
+		}
+		if e.Rid != "" {
+			ev.Put(EventFieldMap["Rid"], e.Rid)
+		}
+		if e.Bt != 0 {
+			ev.Put(EventFieldMap["Bt"], e.Bt)
+		}
+		if e.Bdur != "" {
+			ev.Put(EventFieldMap["Bdur"], e.Bdur)
+		}
+		if e.Bpn != "" {
+			ev.Put(EventFieldMap["Bpn"], e.Bpn)
+		}
+		if e.Bct != 0 {
+			ev.Put(EventFieldMap["Bct"], e.Bct)
+		}
+		if e.Bi != 0 {
+			ev.Put(EventFieldMap["Bi"], e.Bi)
+		}
+		if e.Actn != "" {
+			ev.Put(EventFieldMap["Actn"], e.Actn)
+		}
+		if e.Actp != "" {
+			ev.Put(EventFieldMap["Actp"], e.Actp)
+		}
+		if e.Sgdur != 0 {
+			ev.Put(EventFieldMap["Sgdur"], e.Sgdur)
+		}
+		if e.Upc != "" {
+			ev.Put(EventFieldMap["Upc"], e.Upc)
+		}
+		if e.Isrc != "" {
+			ev.Put(EventFieldMap["Isrc"], e.Isrc)
+		}
+
+		if mdsupdate.F == 2 {
+			// TODO format 2 fields
+		}
+
+		event.PutValue("ev", ev)
 		events = append(events, event)
 	}
 

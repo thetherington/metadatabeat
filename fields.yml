@@ -11083,8 +11083,172 @@
   title: metadatabeat
   description:
   fields:
-    - name: counter
-      type: long
+    - name: type
       required: true
+      type: keyword
       description: >
-        PLEASE UPDATE DOCUMENTATION
+        Data Type
+    - name: node
+      type: group
+      fields: 
+        - name: src
+          type: ip
+          required: true
+          description: >
+            IP address of the metadata node
+        - name: dst
+          type: keyword
+          required: true
+          description: >
+            Destination multicast address
+    - name: mds
+      type: group
+      fields: 
+        - name: format
+          type: keyword
+          required: true
+          description: >
+            MDS format of the message
+        - name: version
+          type: keyword
+          required: true
+          description: >
+            MDS version
+    - name: ev
+      type: group
+      fields: 
+        - name: queue_depth
+          type: integer
+          required: true
+          description: >
+            Queue depth indicates the order in which metadata events shall become active
+        - name: artist
+          type: keyword
+          required: false
+          description: >
+            The artist performing a song; this is displayed in receivers.
+        - name: title
+          type: keyword
+          required: false
+          description: >
+            The title of a song; this is displayed in receivers. 
+        - name: comment_1
+          type: keyword
+          required: false
+          description: >
+            A generic text field associated with the metadata event.
+        - name: comment_2
+          type: keyword
+          required: false
+          description: >
+            A generic text field associated with the metadata event. 
+        - name: display
+          type: integer
+          required: true
+          description: >
+            This field indicates whether or not the event should be routed downstream of the MDS             
+        - name: duration
+          type: integer
+          required: false
+          description: >
+            Duration is the display duration of the associated audio in seconds.
+        - name: bus_code
+          type: keyword
+          required: true
+          description: >
+            A bus code is a broadcast parameter for routing purposes.
+        - name: pts
+          type: keyword
+          required: true
+          description: >
+            The time stamp provides a time of day indicating when the associated metadata is to be presented
+        - name: source_type
+          type: keyword
+          required: true
+          description: >
+            This field identifies the type of the source of the event.
+        - name: asset_id
+          type: keyword
+          required: false
+          description: >
+            An asset ID is a unique ID for metadata associated with the event.
+        - name: content_type
+          type: keyword
+          required: true
+          description: >
+            This field identifies the type of content the metadata applies to
+        - name: music_db_id
+          type: keyword
+          required: false
+          description: >
+            Music DB ID
+        - name: artist_id
+          type: keyword
+          required: false
+          description: >
+            Artist ID is only used in a system configured without a MAM otherwise it is ignored
+        - name: pid
+          type: keyword
+          required: false
+          description: >
+            Parameter used to provide advanced low band receiver features.
+        - name: reconciliation_id
+          type: keyword
+          required: false
+          description: >
+            Reconciliation ID is currently used for Business Intelligence
+        - name: parent_type_id
+          type: integer
+          required: false
+          description: >
+            This field is a number that indicates the parent type of an event
+        - name: parent_duration
+          type: keyword
+          required: false
+          description: >
+            This field is a number indicating the duration of a spot block. It is seconds with a decimal place
+        - name: parent_name
+          type: keyword
+          required: false
+          description: >
+            This field is a string that is used for children of macro and show type.
+        - name: child_count
+          type: integer
+          required: false
+          description: >
+            This field is a number that is the total count of child events in a spot block.
+        - name: child_index
+          type: integer
+          required: false
+          description: >
+            This field is a number that indicates the instance of a child within a spot block.
+        - name: action
+          type: keyword
+          required: false
+          description: >
+            This is a sting parameter to instruct the MDS to indicate specific action associated with the cut.
+        - name: action_param
+          type: keyword
+          required: false
+          description: >
+            This is a sting parameter associated with an action.
+        - name: playout_duration
+          type: long
+          required: false
+          description: >
+            Number of milliseconds of the current audio playout.
+        - name: segue_duration
+          type: long
+          required: false
+          description: >
+            Number of milliseconds until the next audio is expected to start.
+        - name: upc
+          type: keyword
+          required: false
+          description: >
+            The UPC associated with the content.
+        - name: isrc
+          type: keyword
+          required: false
+          description: >
+            The ISRC associated with the content.

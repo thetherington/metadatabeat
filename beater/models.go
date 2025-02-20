@@ -3,8 +3,19 @@ package beater
 import (
 	"encoding/xml"
 	"fmt"
+	"log"
 	"reflect"
 )
+
+var EventFieldMap = map[string]string{}
+
+// save the struct "es" tags
+func init() {
+	var err error
+	if EventFieldMap, err = parseStructTags(MdseventType{}); err != nil {
+		log.Fatal(err)
+	}
+}
 
 // MdseventType ...
 type MdseventType struct {
@@ -28,28 +39,28 @@ type MdseventType struct {
 	Xart    string   `xml:"xart,attr,omitempty"      es:"highband_artist"`
 	Xpid    string   `xml:"xpid,attr,omitempty"      es:"highband_pid"`
 	Rid     string   `xml:"rid,attr,omitempty"       es:"reconciliation_id"`
-	Scor    string   `xml:"scor,attr,omitempty"`
-	Bt      uint32   `xml:"bt,attr,omitempty"`
-	Bdur    string   `xml:"bdur,attr,omitempty"`
-	Bpn     string   `xml:"bpn,attr,omitempty"`
-	Bct     uint32   `xml:"bct,attr,omitempty"`
-	Bi      uint32   `xml:"bi,attr,omitempty"`
-	Actn    string   `xml:"actn,attr,omitempty"`
-	Actp    string   `xml:"actp,attr,omitempty"`
+	Scor    string   `xml:"scor,attr,omitempty"      es:"sports_score"`
+	Bt      uint32   `xml:"bt,attr,omitempty"        es:"parent_type_id"`
+	Bdur    string   `xml:"bdur,attr,omitempty"      es:"parent_duration"`
+	Bpn     string   `xml:"bpn,attr,omitempty"       es:"parent_name"`
+	Bct     uint32   `xml:"bct,attr,omitempty"       es:"child_count"`
+	Bi      uint32   `xml:"bi,attr,omitempty"        es:"child_index"`
+	Actn    string   `xml:"actn,attr,omitempty"      es:"action"`
+	Actp    string   `xml:"actp,attr,omitempty"      es:"action_param"`
 	Pldur   uint32   `xml:"pldur,attr,omitempty"     es:"playout_duration"`
 	Sgdur   uint32   `xml:"sgdur,attr,omitempty"     es:"segue_duration"`
-	Eph     string   `xml:"eph,attr,omitempty"`
-	EID     string   `xml:"eID,attr,omitempty"`
-	Soff    uint32   `xml:"soff,attr,omitempty"`
-	Stitl   string   `xml:"stitl,attr,omitempty"`
-	Sart    string   `xml:"sart,attr,omitempty"`
-	Wtitl   string   `xml:"wtitl,attr,omitempty"`
-	Wart    string   `xml:"wart,attr,omitempty"`
-	Apid    string   `xml:"apid,attr,omitempty"`
-	ScID    string   `xml:"scID,attr,omitempty"`
-	Hmod    string   `xml:"hmod,attr,omitempty"`
-	Isrc    string   `xml:"isrc,attr,omitempty"`
-	Upc     string   `xml:"upc,attr,omitempty"`
+	Eph     string   `xml:"eph,attr,omitempty"       es:"ephemeral"`
+	EID     string   `xml:"eID,attr,omitempty"       es:"sports_event_id"`
+	Soff    uint32   `xml:"soff,attr,omitempty"      es:"start_offset"`
+	Stitl   string   `xml:"stitl,attr,omitempty"     es:"lowband_title"`
+	Sart    string   `xml:"sart,attr,omitempty"      es:"lowband_artist"`
+	Wtitl   string   `xml:"wtitl,attr,omitempty"     es:"streaming_title"`
+	Wart    string   `xml:"wart,attr,omitempty"      es:"streaming_artist"`
+	Apid    string   `xml:"apid,attr,omitempty"      es:"apg_sports_pids"`
+	ScID    string   `xml:"scID,attr,omitempty"      es:"schedule_id"`
+	Hmod    string   `xml:"hmod,attr,omitempty"      es:"hybrid_mod"`
+	Isrc    string   `xml:"isrc,attr,omitempty"      es:"isrc"`
+	Upc     string   `xml:"upc,attr,omitempty"       es:"upc"`
 }
 
 // RootType ...
