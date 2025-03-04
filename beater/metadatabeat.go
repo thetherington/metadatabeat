@@ -171,7 +171,6 @@ func (bt *metadatabeat) MsgHandler(dst net.IP, src net.Addr, n int, b []byte) {
 				)
 
 				var mdsdata MdsUpdate
-
 				if err := xml.Unmarshal(doc, &mdsdata); err != nil {
 					logp.Err("%s: error unmarshaling XML: %v", dst.String(), err)
 					return
@@ -212,126 +211,59 @@ func (bt *metadatabeat) BuildEvents(src string, dst string, mdsupdate MdsUpdate)
 
 		// mandatory fields for format 1 and 2
 		ev := mapstr.M{
-			EventFieldMap["Q"]:    e.Q,
-			EventFieldMap["Pts"]:  e.Pts,
-			EventFieldMap["SrcT"]: e.SrcT,
-			EventFieldMap["ConT"]: e.ConT,
-			EventFieldMap["Bc"]:   e.Bc,
-			EventFieldMap["Disp"]: e.Disp,
+			EventFieldMap["Q"]:    e.Q,    // queue_depth
+			EventFieldMap["Pts"]:  e.Pts,  // pts
+			EventFieldMap["SrcT"]: e.SrcT, // source_type
+			EventFieldMap["ConT"]: e.ConT, // content_type
+			EventFieldMap["Bc"]:   e.Bc,   // bus_code
+			EventFieldMap["Disp"]: e.Disp, // display
 		}
 
 		// integer fields which can't do anything about default values
-		ev.Put(EventFieldMap["Pldur"], e.Pldur)
+		ev.Put(EventFieldMap["Pldur"], e.Pldur) // playout_duration
 
 		// optional fields for format 1 and 2
-		if e.AID != "" {
-			ev.Put(EventFieldMap["AID"], e.AID)
-		}
-		if e.Art != "" {
-			ev.Put(EventFieldMap["Art"], e.Art)
-		}
-		if e.Titl != "" {
-			ev.Put(EventFieldMap["Titl"], e.Titl)
-		}
-		if e.Pid != "" {
-			ev.Put(EventFieldMap["Pid"], e.Pid)
-		}
-		if e.Com1 != "" {
-			ev.Put(EventFieldMap["Com1"], e.Com1)
-		}
-		if e.Com2 != "" {
-			ev.Put(EventFieldMap["Com2"], e.Com2)
-		}
-		if e.ArtID != "" {
-			ev.Put(EventFieldMap["ArtID"], e.ArtID)
-		}
-		if e.Dur != 0 {
-			ev.Put(EventFieldMap["Dur"], e.Dur)
-		}
-		if e.MID != "" {
-			ev.Put(EventFieldMap["MID"], e.MID)
-		}
-		if e.Rid != "" {
-			ev.Put(EventFieldMap["Rid"], e.Rid)
-		}
-		if e.Bt != 0 {
-			ev.Put(EventFieldMap["Bt"], e.Bt)
-		}
-		if e.Bdur != "" {
-			ev.Put(EventFieldMap["Bdur"], e.Bdur)
-		}
-		if e.Bpn != "" {
-			ev.Put(EventFieldMap["Bpn"], e.Bpn)
-		}
-		if e.Bct != 0 {
-			ev.Put(EventFieldMap["Bct"], e.Bct)
-		}
-		if e.Bi != 0 {
-			ev.Put(EventFieldMap["Bi"], e.Bi)
-		}
-		if e.Actn != "" {
-			ev.Put(EventFieldMap["Actn"], e.Actn)
-		}
-		if e.Actp != "" {
-			ev.Put(EventFieldMap["Actp"], e.Actp)
-		}
-		if e.Sgdur != 0 {
-			ev.Put(EventFieldMap["Sgdur"], e.Sgdur)
-		}
-		if e.Upc != "" {
-			ev.Put(EventFieldMap["Upc"], e.Upc)
-		}
-		if e.Isrc != "" {
-			ev.Put(EventFieldMap["Isrc"], e.Isrc)
-		}
+		updateMapString("AID", e.AID, ev)     // asset_id
+		updateMapString("Art", e.Art, ev)     // artist
+		updateMapString("Titl", e.Titl, ev)   // title
+		updateMapString("Pid", e.Pid, ev)     // pid
+		updateMapString("Com1", e.Com1, ev)   // comment_1
+		updateMapString("Com2", e.Com2, ev)   // comment_2
+		updateMapString("ArtID", e.ArtID, ev) // artist_id
+		updateMapNumber("Dur", e.Dur, ev)     // duration
+		updateMapString("MID", e.MID, ev)     // music_db_id
+		updateMapString("Rid", e.Rid, ev)     // reconciliation_id
+		updateMapNumber("Bt", e.Bt, ev)       // parent_type_id
+		updateMapString("Bdur", e.Bdur, ev)   // parent_duration
+		updateMapString("Bpn", e.Bpn, ev)     // parent_name
+		updateMapNumber("Bct", e.Bct, ev)     // child_count
+		updateMapNumber("Bi", e.Bi, ev)       // child_index
+		updateMapString("Actn", e.Actn, ev)   // action
+		updateMapString("Actp", e.Actp, ev)   // action_param
+		updateMapNumber("Sgdur", e.Sgdur, ev) // segue_duration
+		updateMapString("Upc", e.Upc, ev)     // upc
+		updateMapString("Isrc", e.Isrc, ev)   // isrc
 
 		// format 2 fields
 		if mdsupdate.F == 2 {
-			if e.EID != "" {
-				ev.Put(EventFieldMap["EID"], e.EID)
-			}
-			if e.Scor != "" {
-				ev.Put(EventFieldMap["Scor"], e.Scor)
-			}
-			if e.Xtitl != "" {
-				ev.Put(EventFieldMap["Xtitl"], e.Xtitl)
-			}
-			if e.Xart != "" {
-				ev.Put(EventFieldMap["Xart"], e.Xart)
-			}
-			if e.Stitl != "" {
-				ev.Put(EventFieldMap["Stitl"], e.Stitl)
-			}
-			if e.Sart != "" {
-				ev.Put(EventFieldMap["Sart"], e.Sart)
-			}
-			if e.Wtitl != "" {
-				ev.Put(EventFieldMap["Wtitl"], e.Wtitl)
-			}
-			if e.Wart != "" {
-				ev.Put(EventFieldMap["Wart"], e.Wart)
-			}
-			if e.Hmod != "" {
-				ev.Put(EventFieldMap["Hmod"], e.Hmod)
-			}
-			if e.Eph != "" {
-				ev.Put(EventFieldMap["Eph"], e.Eph)
-			}
-			if e.Xpid != "" {
-				ev.Put(EventFieldMap["Xpid"], e.Xpid)
-			}
-			if e.Soff != 0 {
-				ev.Put(EventFieldMap["Soff"], e.Soff)
-			}
-			if e.ScID != "" {
-				ev.Put(EventFieldMap["ScID"], e.ScID)
-			}
-			if e.Apid != "" {
-				ev.Put(EventFieldMap["Apid"], e.Apid)
-			}
+			updateMapString("EID", e.EID, ev)     // sports_event_id
+			updateMapString("Scor", e.Scor, ev)   // sports_score
+			updateMapString("Xtitl", e.Xtitl, ev) // highband_title
+			updateMapString("Xart", e.Xart, ev)   // highband_artist
+			updateMapString("Stitl", e.Stitl, ev) // lowband_title
+			updateMapString("Sart", e.Sart, ev)   // lowband_artist
+			updateMapString("Wtitl", e.Wtitl, ev) // streaming_title
+			updateMapString("Wart", e.Wart, ev)   // streaming_artist
+			updateMapString("Hmod", e.Hmod, ev)   // hybrid_mod
+			updateMapString("Eph", e.Eph, ev)     // ephemeral
+			updateMapString("Xpid", e.Xpid, ev)   // highband_pid
+			updateMapNumber("Soff", e.Soff, ev)   // start_offset
+			updateMapString("ScID", e.ScID, ev)   // schedule_id
+			updateMapString("Apid", e.Apid, ev)   // apg_sports_pids
 		}
 
 		event.PutValue("ev", ev)
+
 		events = append(events, event)
 	}
 
