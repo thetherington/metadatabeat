@@ -5,7 +5,6 @@ import (
 	"log"
 	"net"
 
-	metadataCfg "github.com/thetherington/metadatabeat/config"
 	"golang.org/x/net/ipv4"
 )
 
@@ -21,9 +20,15 @@ type UDPMulticastListener struct {
 	mcasts []net.IP
 }
 
+type ListenerConfig struct {
+	Port       int
+	Addresses  []string
+	Interfaces []string
+}
+
 // Listen binds to the UDP address and port given and writes packets received
 // from that address to a buffer which is passed to a hander
-func NewListener(cfg metadataCfg.Config, handler handler) (*UDPMulticastListener, error) {
+func NewListener(cfg *ListenerConfig, handler handler) (*UDPMulticastListener, error) {
 	if len(cfg.Addresses) == 0 || len(cfg.Interfaces) == 0 {
 		return nil, fmt.Errorf("%w: %d addresses / %d multicasts", errMissingArguments, len(cfg.Addresses), len(cfg.Interfaces))
 	}

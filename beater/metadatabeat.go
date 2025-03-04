@@ -69,8 +69,14 @@ func (bt *metadatabeat) Run(b *beat.Beat) error {
 		return err
 	}
 
+	cfg := &connection.ListenerConfig{
+		Port:       bt.config.Port,
+		Addresses:  bt.config.Addresses,
+		Interfaces: bt.config.Interfaces,
+	}
+
 	// start the multicast udp listener and subscribe to all addresses in the config
-	bt.listener, err = connection.NewListener(bt.config, bt.MsgHandler)
+	bt.listener, err = connection.NewListener(cfg, bt.MsgHandler)
 	if err != nil {
 		return err
 	}
@@ -180,6 +186,12 @@ func (bt *metadatabeat) MsgHandler(dst net.IP, src net.Addr, n int, b []byte) {
 
 // Event builder for beat events
 func (bt *metadatabeat) BuildEvents(src string, dst string, mdsupdate MdsUpdate) {
+	// if the format is 0 then log and return
+	if mdsupdate.F == 0 {
+		logp.Warn("%s: format is missing or is explicity 0 for stream: %s", src, dst)
+		return
+	}
+
 	var events []beat.Event
 
 	for _, e := range mdsupdate.Ev {
@@ -198,7 +210,7 @@ func (bt *metadatabeat) BuildEvents(src string, dst string, mdsupdate MdsUpdate)
 			},
 		}
 
-		// mandatory fields
+		// mandatory fields for format 1 and 2
 		ev := mapstr.M{
 			EventFieldMap["Q"]:    e.Q,
 			EventFieldMap["Pts"]:  e.Pts,
@@ -211,6 +223,7 @@ func (bt *metadatabeat) BuildEvents(src string, dst string, mdsupdate MdsUpdate)
 		// integer fields which can't do anything about default values
 		ev.Put(EventFieldMap["Pldur"], e.Pldur)
 
+		// optional fields for format 1 and 2
 		if e.AID != "" {
 			ev.Put(EventFieldMap["AID"], e.AID)
 		}
@@ -272,8 +285,50 @@ func (bt *metadatabeat) BuildEvents(src string, dst string, mdsupdate MdsUpdate)
 			ev.Put(EventFieldMap["Isrc"], e.Isrc)
 		}
 
+		// format 2 fields
 		if mdsupdate.F == 2 {
-			// TODO format 2 fields
+			if e.EID != "" {
+				ev.Put(EventFieldMap["EID"], e.EID)
+			}
+			if e.Scor != "" {
+				ev.Put(EventFieldMap["Scor"], e.Scor)
+			}
+			if e.Xtitl != "" {
+				ev.Put(EventFieldMap["Xtitl"], e.Xtitl)
+			}
+			if e.Xart != "" {
+				ev.Put(EventFieldMap["Xart"], e.Xart)
+			}
+			if e.Stitl != "" {
+				ev.Put(EventFieldMap["Stitl"], e.Stitl)
+			}
+			if e.Sart != "" {
+				ev.Put(EventFieldMap["Sart"], e.Sart)
+			}
+			if e.Wtitl != "" {
+				ev.Put(EventFieldMap["Wtitl"], e.Wtitl)
+			}
+			if e.Wart != "" {
+				ev.Put(EventFieldMap["Wart"], e.Wart)
+			}
+			if e.Hmod != "" {
+				ev.Put(EventFieldMap["Hmod"], e.Hmod)
+			}
+			if e.Eph != "" {
+				ev.Put(EventFieldMap["Eph"], e.Eph)
+			}
+			if e.Xpid != "" {
+				ev.Put(EventFieldMap["Xpid"], e.Xpid)
+			}
+			if e.Soff != 0 {
+				ev.Put(EventFieldMap["Soff"], e.Soff)
+			}
+			if e.ScID != "" {
+				ev.Put(EventFieldMap["ScID"], e.ScID)
+			}
+			if e.Apid != "" {
+				ev.Put(EventFieldMap["Apid"], e.Apid)
+			}
 		}
 
 		event.PutValue("ev", ev)

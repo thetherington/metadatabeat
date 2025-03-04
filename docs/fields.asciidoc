@@ -16011,6 +16011,174 @@ required: False
 
 --
 
+*`ev.sports_event_id`*::
++
+--
+A string that uniquely identifies a sports event.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.sports_score`*::
++
+--
+This is the cut score. It is comprised of up to 8 key=value pair.
+
+
+type: text
+
+required: False
+
+--
+
+*`ev.highband_title`*::
++
+--
+The title of a song; this is displayed in receivers.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.highband_artist`*::
++
+--
+The artist performing a song; this is displayed in receivers.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.lowband_title`*::
++
+--
+The title of a song; this is displayed in receivers.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.lowband_artist`*::
++
+--
+The artist performing a song; this is displayed in receivers.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.streaming_title`*::
++
+--
+The title of a song; this is displayed in receivers.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.streaming_artist`*::
++
+--
+The artist performing a song; this is displayed in receivers. 
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.hybrid_mod`*::
++
+--
+A string that identifies and calls out a specific MDS behavior.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.ephemeral`*::
++
+--
+Indicates that the BB is supposed to be presented to 360L without a trigger activating the presentation
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.highband_pid`*::
++
+--
+Parameter used to provide advanced low and high band receiver features.
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.start_offset`*::
++
+--
+A legacy filed used to bridge the transition off of legacy equipment. It is the number representing seconds. 
+
+
+type: long
+
+required: False
+
+--
+
+*`ev.schedule_id`*::
++
+--
+A string identifier populated by the APG. It is the BV ID of the source block that defined the metadata. 
+
+
+type: keyword
+
+required: False
+
+--
+
+*`ev.apg_sports_pids`*::
++
+--
+This field is used by the MDS to properly assign sports PIDs from the APG.
+
+
+type: text
+
+required: False
+
+--
+
 [[exported-fields-process]]
 == Process fields
 

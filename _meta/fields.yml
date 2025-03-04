@@ -171,3 +171,73 @@
           required: false
           description: >
             The ISRC associated with the content.
+        - name: sports_event_id
+          type: keyword
+          required: false
+          description: >
+            A string that uniquely identifies a sports event.
+        - name: sports_score
+          type: text
+          required: false
+          description: >
+            This is the cut score. It is comprised of up to 8 key=value pair.
+        - name: highband_title
+          type: keyword
+          required: false
+          description: >
+            The title of a song; this is displayed in receivers.
+        - name: highband_artist
+          type: keyword
+          required: false
+          description: >
+            The artist performing a song; this is displayed in receivers.
+        - name: lowband_title
+          type: keyword
+          required: false
+          description: >
+            The title of a song; this is displayed in receivers.
+        - name: lowband_artist
+          type: keyword
+          required: false
+          description: >
+            The artist performing a song; this is displayed in receivers.
+        - name: streaming_title
+          type: keyword
+          required: false
+          description: >
+            The title of a song; this is displayed in receivers.
+        - name: streaming_artist
+          type: keyword
+          required: false
+          description: >
+            The artist performing a song; this is displayed in receivers. 
+        - name: hybrid_mod
+          type: keyword
+          required: false
+          description: >
+            A string that identifies and calls out a specific MDS behavior.
+        - name: ephemeral
+          type: keyword
+          required: false
+          description: >
+            Indicates that the BB is supposed to be presented to 360L without a trigger activating the presentation
+        - name: highband_pid
+          type: keyword
+          required: false
+          description: >
+            Parameter used to provide advanced low and high band receiver features.
+        - name: start_offset
+          type: long
+          required: false
+          description: >
+            A legacy filed used to bridge the transition off of legacy equipment. It is the number representing seconds. 
+        - name: schedule_id
+          type: keyword
+          required: false
+          description: >
+            A string identifier populated by the APG. It is the BV ID of the source block that defined the metadata. 
+        - name: apg_sports_pids
+          type: text
+          required: false
+          description: >
+            This field is used by the MDS to properly assign sports PIDs from the APG.
